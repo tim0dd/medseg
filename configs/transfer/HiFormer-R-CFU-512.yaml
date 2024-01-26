@@ -1,0 +1,86 @@
+architecture:
+  arch_type: "HiFormerB"
+  model_name: "HiFormerB-R-CFU-512"
+  in_size: 512
+
+settings:
+  max_epochs: 401
+  batch_size: 10
+  random_seed: 1234
+  full_determinism: False
+  mixed_precision: True
+  torch_compile: False
+  num_workers: 2
+  pin_memory: True
+  checkpoints:
+    save_mode: "best_and_last"
+    metric: "iou"
+    min_epoch: 0
+  eval_object_sizes: True
+  save_sample_segmentations: True
+  transforms_backend: "torchvision"
+
+optimizer:
+  type: "SGD"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 0.0001
+
+scheduler: False
+
+early_stop: False
+
+metrics:
+  tracked:
+    - "dice"
+    - "iou"
+    - "precision"
+    - "recall"
+    - "f1_score"
+  averaging_method: "micro"
+  ignore_background_class: True
+
+dataset:
+  type: "CFU"
+
+transforms:
+  train:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 512
+    - random_horizontal_flip:
+        p: 0.5
+    - random_vertical_flip:
+        p: 0.5
+    - random_rotation:
+        degrees: "(-180, 180)"
+        fill: 0
+        mask_fill: 0
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+
+  val:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 512
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+
+  test:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 512
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False

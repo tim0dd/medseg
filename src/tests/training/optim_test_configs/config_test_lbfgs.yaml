@@ -1,0 +1,15 @@
+# lr: float=..., max_iter: int=..., max_eval: Optional[int]=..., tolerance_grad: float=..., tolerance_change: float=..., history_size: int=..., line_search_fn: Optional[str]=...
+
+# Note that these parameters are only used for testing correct
+# parsing and initialization of the optimizer. The values don't
+# necessarily make a lot of sense in a normal configuration.
+
+optimizer:
+  type: "LBFGS"
+  lr: 0.1
+  max_iter: 20
+  max_eval: 30
+  tolerance_grad: 0.4
+  tolerance_change: 0.5
+  history_size: 60
+  line_search_fn: "strong_wolfe"

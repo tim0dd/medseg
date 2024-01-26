@@ -1,0 +1,75 @@
+architecture:
+  arch_type: "SegformerB3"
+  model_name: "SegformerB3-R-City-1024"
+  in_size: 1024
+settings:
+  max_epochs: 256
+  batch_size: 4
+  random_seed: 8810284
+  full_determinism: False
+  mixed_precision: True
+  torch_compile: False
+  num_workers: 4
+  pin_memory: True
+  checkpoints:
+    save_mode: 'best_and_last'
+    metric: "iou"
+    min_epoch: 50
+  save_sample_segmentations: True
+  transforms_backend: "torchvision"
+  final_eval_epochs: 1
+optimizer:
+  type: 'AdamW'
+  lr: 0.00006
+  betas: (0.9, 0.999)
+  weight_decay: 0.01
+loss:
+  type: "CE"
+scheduler:
+  type: "polynomial"
+  total_iters: 256
+  power: 1.0
+early_stop: False
+metrics:
+  tracked:
+    - "dice"
+    - "iou"
+    - "precision"
+    - "recall"
+  averaging_method: "micro"
+  ignore_background_class: True
+dataset:
+  type: "Cityscapes"
+transforms:
+  train:
+    - to_tensor: True
+    - random_ratio_resize:
+        min_ratio: 0.5
+        max_ratio: 2.0
+    - random_crop:
+        size: 1024
+        pad_if_needed: True
+        img_fill: 0
+        mask_fill: 255
+    - random_horizontal_flip:
+        p: 0.5
+    - random_photometric_distort:
+        brightness: (0.875, 1.125)
+        contrast: (0.5, 1.5)
+        saturation: (0.5, 1.5)
+        hue: (-0.05, 0.05)
+        p: 0.5
+    - normalize:
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+  val:
+    - to_tensor: True
+    - normalize:
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+  test:
+    - to_tensor: True
+    - normalize:
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+

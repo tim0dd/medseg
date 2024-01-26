@@ -1,0 +1,126 @@
+# Config to load the DFUC-FUSeg dataset in order to compute the class imbalance or calculate the mean and std of the dataset.
+settings:
+  transforms_backend: "albumentations"
+
+dataset:
+  type: "CFU"
+
+#transforms:
+#  train:
+#    - to_tensor: True
+#    - pad_and_resize:
+#        size: 512
+#    - gaussian_blur:
+#        kernel_size: 25
+#        sigma: (0.001, 2.0)
+#    - random_affine:
+#        degrees: (-180, 180)
+#        translate: (0.25, 0.25)
+#        scale: (0.75, 1.25)
+#        shear: 17.5
+#        fill: 0
+#        mask_fill: 0
+#    - threshold:
+#        threshold: 127
+#        pixel_min: 0
+#        pixel_max: 255
+#        apply_to_mask: True
+#        apply_to_image: False
+#    - random_photometric_distort:
+#        brightness: (0.875, 1.125)
+#        contrast: (0.5, 1.5)
+#        saturation: (0.5, 1.5)
+#        hue: (-0.05, 0.05)
+#        p: 0.5
+#    - random_horizontal_flip:
+#        p: 0.5
+#    - random_vertical_flip:
+#        p: 0.5
+
+transforms:
+  train:
+    - square_pad:
+        value: 0
+        mask_value: 0
+    - one_of:
+        - center_crop:
+            height: 512
+            width: 512
+            p: 0.5
+        - random_crop:
+            height: 512
+            width: 512
+            p: 0.5
+        - p: 1
+    - horizontal_flip:
+        p: 0.5
+    - vertical_flip:
+        p: 0.5
+    - shift_scale_rotate:
+        shift_limit: 0.1
+        scale_limit: 0.1
+        rotate_limit: 45
+        p: 0.5
+    - one_of:
+        - coarse_dropout:
+            max_holes: 8
+            max_height: 20
+            max_width: 20
+            min_width: 8
+            fill_value: 0
+            P: 1
+        - gauss_noise:
+            var_limit: (10.0, 50.0)
+            mean: 0
+            P: 1
+        - p: 0.5
+    - normalize:
+        mean: [ 0.485, 0.456, 0.406 ]
+        std: [ 0.229, 0.224, 0.225 ]
+    - to_tensor: True
+  val:
+    - resize:
+        height: 512
+        width: 512
+    - normalize:
+        mean: [ 0.485, 0.456, 0.406 ]
+        std: [ 0.229, 0.224, 0.225 ]
+    - to_tensor: True
+  test:
+    - resize:
+        height: 512
+        width: 512
+    - normalize:
+        mean: [ 0.485, 0.456, 0.406 ]
+        std: [ 0.229, 0.224, 0.225 ]
+    - to_tensor: True
+
+#  val:
+#    - to_tensor: True
+#    - pad_and_resize:
+#        size: 512
+#    - threshold:
+#        threshold: 127
+#        pixel_min: 0
+#        pixel_max: 255
+#        apply_to_mask: True
+#        apply_to_image: False
+#    - normalize:
+#        mean: [ 0.5, 0.5, 0.5 ]
+#        std: [ 0.5, 0.5, 0.5 ]
+#        apply_to_mask: False
+#
+#  test:
+#    - to_tensor: True
+#    - pad_and_resize:
+#        size: 512
+#    - threshold:
+#        threshold: 127
+#        pixel_min: 0
+#        pixel_max: 255
+#        apply_to_mask: True
+#        apply_to_image: False
+#    - normalize:
+#        mean: [ 0.5, 0.5, 0.5 ]
+#        std: [ 0.5, 0.5, 0.5 ]
+#        apply_to_mask: False

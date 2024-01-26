@@ -1,0 +1,16 @@
+settings:
+    transforms_backend: torchvision
+
+transforms:
+    train:
+        - normalize:
+              mean: [0.1, 0.2, 0.3]
+              std: [0.4, 0.5, 0.6]
+    test:
+        - normalize:
+              mean: [0.6, 0.5, 0.4]
+              std: [0.3, 0.2, 0.1]
+    val:
+        - normalize:
+              mean: [0.4, 0.5, 0.6]
+              std: [0.7, 0.8, 0.9]

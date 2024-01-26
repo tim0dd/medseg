@@ -1,0 +1,13 @@
+# lr: float=..., lr_decay: float=..., weight_decay: float=..., initial_accumulator_value: float=...,  eps: float=...
+
+# Note that these parameters are only used for testing correct
+# parsing and initialization of the optimizer. The values don't
+# necessarily make a lot of sense in a normal configuration.
+
+optimizer:
+    type: "AdaGrad"
+    lr: 0.1
+    lr_decay: 0.2
+    weight_decay: 0.3
+    initial_accumulator_value: 0.4
+    eps: 0.5

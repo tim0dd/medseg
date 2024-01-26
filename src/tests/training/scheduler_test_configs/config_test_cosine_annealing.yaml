@@ -1,0 +1,7 @@
+# optimizer: Optimizer, T_max: int, eta_min: float=..., last_epoch: int=...
+
+scheduler:
+    type: cosine_annealing
+    T_max: 10
+    eta_min: 0.0002
+    verbose: True

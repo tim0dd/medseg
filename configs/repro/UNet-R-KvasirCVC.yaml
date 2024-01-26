@@ -1,0 +1,65 @@
+architecture:
+  arch_type: "UNet"
+  model_name: "UNet-R-KvasirCVC"
+  l1_feature_maps: 64
+  unet_levels: 4
+  norm: 'none'
+  in_size: 352
+  multiscale:
+    multiscale_factor: 0.25
+    divisor: 32
+    align_corners: True
+settings:
+  max_epochs: 200
+  batch_size: 6
+  random_seed: 42
+  full_determinism: False
+  mixed_precision: True
+  torch_compile: False
+  num_workers: 4
+  pin_memory: True
+  checkpoints:
+    save_mode: 'best_and_last'
+    metric: "iou"
+    min_epoch: 50
+  save_sample_segmentations: False
+  transforms_backend: "torchvision"
+optimizer:
+  type: "Adam"
+  lr: 0.0001
+loss:
+  type: "caranet"
+scheduler: False
+early_stop: False
+metrics:
+  tracked:
+    - "dice"
+    - "iou"
+    - "precision"
+    - "recall"
+    - "f1_score"
+  averaging_method: "micro"
+  ignore_background_class: True
+dataset: # Polyp-Quintet configuration
+  type: "KvasirCVCTrain"
+  aux_test_datasets:
+    - "CVCClinicDbTest"
+    - "KvasirSegTest"
+    - "CVC300Test"
+    - "CVCColonDbTest"
+    - "EtisLaribPolypDbTest"
+transforms:
+  train:
+    - to_tensor: True
+    - resize:
+        size: (352, 352)
+    - normalize:
+        mean: [ 0.485, 0.456, 0.406 ]
+        std: [ 0.229, 0.224, 0.225 ]
+  test:
+    - to_tensor: True
+    - resize:
+        size: (352, 352)
+    - normalize:
+        mean: [ 0.485, 0.456, 0.406 ]
+        std: [ 0.229, 0.224, 0.225 ]

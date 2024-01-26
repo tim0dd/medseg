@@ -1,0 +1,131 @@
+hyperopt:
+  type: "hyperband"
+  metric: "iou"
+  maximize: True
+  random_seed: 8384595
+  R: 100
+  eta: 3
+  param_space:
+    architecture:
+      ham_channels: [ 256, 512, 1024 ]
+      ham_align_channels: [ 256, 512, 1024 ]
+      mscan_dropout_ratio: [ 0.0, 0.2, 0.4 ]
+      ham_dropout_ratio: [ 0.0, 0.1, 0.4 ]
+    optimizer:
+      lr: [ 0.000001, 0.000005, 0.00001, 0.00005, 0.0001, 0.0005, 0.001 ]
+      weight_decay: [ 0.001, 0.005, 0.01, 0.05 ]
+    settings:
+      batch_size: [ 2, 4, 6 ]
+
+architecture:
+  arch_type: "SegNeXtB"
+  model_name: "SegNeXtB-R-CFU-512-STUDY"
+  in_size: 512
+
+settings:
+  max_epochs: 100
+  batch_size: 1
+  random_seed: 3096997
+  full_determinism: False
+  mixed_precision: False
+  torch_compile: False
+  num_workers: 4
+  pin_memory: True
+  checkpoints:
+    save_mode: "last"
+    metric: "iou"
+    min_epoch: 30
+  save_sample_segmentations: False
+  transforms_backend: "torchvision"
+
+optimizer:
+  type: "AdamW"
+  lr: 0.0001
+
+loss:
+  type: "BCEL"
+
+scheduler:
+  type: "REX"
+  T_max: 100
+
+early_stop: False
+
+metrics:
+  tracked:
+    - "dice"
+    - "iou"
+    - "precision"
+    - "recall"
+    - "f1_score"
+  averaging_method: "micro"
+  ignore_background_class: True
+
+dataset:
+  type: "CFU"
+
+transforms:
+  train:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 512
+    - gaussian_blur:
+        kernel_size: 25
+        sigma: (0.001, 2.0)
+    - random_affine:
+        degrees: (-180, 180)
+        translate: (0.25, 0.25)
+        scale: (0.75, 1.25)
+        shear: 17.5
+        fill: 0
+        mask_fill: 0
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+    - random_photometric_distort:
+        brightness: (0.875, 1.125)
+        contrast: (0.5, 1.5)
+        saturation: (0.5, 1.5)
+        hue: (-0.05, 0.05)
+        p: 0.5
+    - random_horizontal_flip:
+        p: 0.5
+    - random_vertical_flip:
+        p: 0.5
+    - normalize:
+        mean: [ 0.5, 0.5, 0.5 ]
+        std: [ 0.5, 0.5, 0.5 ]
+        apply_to_mask: False
+
+  val:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 512
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+    - normalize:
+        mean: [ 0.5, 0.5, 0.5 ]
+        std: [ 0.5, 0.5, 0.5 ]
+        apply_to_mask: False
+
+  test:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 512
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+    - normalize:
+        mean: [ 0.5, 0.5, 0.5 ]
+        std: [ 0.5, 0.5, 0.5 ]
+        apply_to_mask: False

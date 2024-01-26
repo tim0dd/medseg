@@ -1,0 +1,11 @@
+# lr: float=..., betas: Tuple[float, float]=..., eps: float=...
+
+# Note that these parameters are only used for testing correct
+# parsing and initialization of the optimizer. The values don't
+# necessarily make a lot of sense in a normal configuration.
+
+optimizer:
+    type: "SparseAdam"
+    lr: 0.1
+    betas: (0.3, 0.2)
+    eps: 0.4

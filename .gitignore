@@ -1,0 +1,12 @@
+/data/*
+/out/*
+
+bin/
+.idea
+*.iws
+*.iml
+*.ipr
+.history/*
+__pycache__/
+
+**/*.egg-info

@@ -1,0 +1,13 @@
+settings:
+    transforms_backend: torchvision
+
+transforms:
+    train:
+        - random_horizontal_flip:
+            p: 0.1
+    test:
+        - random_horizontal_flip:
+            p: 0.2
+    val:
+        - random_horizontal_flip:
+            p: 0.3

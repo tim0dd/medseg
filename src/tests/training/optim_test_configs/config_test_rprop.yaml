@@ -1,0 +1,11 @@
+# lr: float=..., etas: Tuple[float, float]=..., step_sizes: Tuple[float, float]=...
+
+# Note that these parameters are only used for testing correct
+# parsing and initialization of the optimizer. The values don't
+# necessarily make a lot of sense in a normal configuration.
+
+optimizer:
+    type: "Rprop"
+    lr: 0.1
+    etas: (0.2, 3)
+    step_sizes: (0.4, 50)

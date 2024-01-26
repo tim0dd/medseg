@@ -1,0 +1,24 @@
+# Config to load the DFUC-FUSeg dataset in order to compute the class imbalance
+dataset:
+  type: "CVCClinicDB"
+
+transforms:
+  train:
+    - to_tensor:
+        normalize_images: True
+        normalize_masks: False
+    - pad_and_resize:
+        size: 352
+
+  val:
+    - to_tensor:
+        normalize_images: True
+        normalize_masks: False
+    - pad_and_resize:
+        size: 352
+  test:
+    - to_tensor:
+        normalize_images: True
+        normalize_masks: False
+    - pad_and_resize:
+        size: 532

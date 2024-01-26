@@ -1,0 +1,28 @@
+# Note that the parameters mask_fill and h, w are usually injected into the transform args in the dataset
+# as they are dataset dependent. Only the size should be normally set in the config.
+settings:
+    transforms_backend: torchvision
+
+transforms:
+    train:
+        - pad_and_resize:
+            padding_mode: "edge"
+            size: 100
+            mask_fill: 1
+            h : 50
+            w : 76
+    val:
+        - pad_and_resize:
+              padding_mode: "constant"
+              size: 101
+              fill: 1
+              mask_fill: 2
+              h: 77
+              w: 51
+    test:
+        - pad_and_resize:
+              padding_mode: "reflect"
+              size: 102
+              mask_fill: 3
+              h: 52
+              w: 60

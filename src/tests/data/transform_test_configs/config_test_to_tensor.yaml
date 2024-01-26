@@ -1,0 +1,10 @@
+settings:
+    transforms_backend: torchvision
+
+transforms:
+    train:
+        - to_tensor
+    test:
+        - to_tensor: False
+    val:
+        - to_tensor: True

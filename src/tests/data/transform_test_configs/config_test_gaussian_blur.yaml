@@ -1,0 +1,16 @@
+settings:
+    transforms_backend: torchvision
+
+transforms:
+  train:
+    - gaussian_blur:
+        kernel_size: 11
+        sigma: (10, 20)
+  val:
+    - gaussian_blur:
+        kernel_size: 13
+        sigma: (30, 40)
+  test:
+    - gaussian_blur:
+        kernel_size: 15
+        sigma: (50, 60)

@@ -1,0 +1,10 @@
+settings:
+    transforms_backend: torchvision
+
+transforms:
+    train:
+        - to_pil_image
+    test:
+        - to_pil_image: False
+    val:
+        - to_pil_image: True

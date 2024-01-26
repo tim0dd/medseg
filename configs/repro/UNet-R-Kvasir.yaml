@@ -1,0 +1,86 @@
+architecture:
+  arch_type: "UNet"
+  model_name: "UNet-R-Kvasir"
+  l1_feature_maps: 64
+  norm: 'none'
+  unet_levels: 4
+  in_size: 352
+settings:
+  max_epochs: 200
+  batch_size: 8
+  random_seed: 42
+  full_determinism: True
+  mixed_precision: True
+  torch_compile: False
+  num_workers: 4
+  pin_memory: True
+  checkpoints:
+    save_mode: 'best_and_last'
+    metric: "iou"
+    min_epoch: 50
+  save_sample_segmentations: False
+  transforms_backend: "torchvision"
+optimizer:
+  type: "AdamW"
+  lr: 0.0001
+loss:
+  type: "BCEDice"
+scheduler:
+  type: "reduce_lr_on_plateau"
+  metric: "dice"
+  mode: "max"
+  min_lr: 0.000001
+  factor: 0.5
+  verbose: True
+early_stop: False
+metrics:
+  tracked:
+    - "dice"
+    - "iou"
+    - "precision"
+    - "recall"
+  averaging_method: "micro"
+  ignore_background_class: True
+dataset:
+  type: "KvasirSeg"
+transforms:
+  train:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 352
+    - gaussian_blur:
+        kernel_size: 25
+        sigma: (0.001, 2.0)
+    - color_jitter:
+        brightness: 0.4
+        contrast: 0.5
+        saturation: 0.25
+        hue: 0.01
+    - normalize:
+        mean: [ 0.5, 0.5, 0.5 ]
+        std: [ 0.5, 0.5, 0.5 ]
+    - random_horizontal_flip:
+        p: 0.5
+    - random_vertical_flip:
+        p: 0.5
+    - random_affine:
+        degrees: (-180, 180)
+        translate: (0.125, 0.125)
+        scale: (0.5, 1.5)
+        shear: 22.5
+        fill: -1.0
+        mask_fill: 0
+  val:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 352
+    - normalize:
+        mean: [ 0.5, 0.5, 0.5 ]
+        std: [ 0.5, 0.5, 0.5 ]
+  test:
+    - to_tensor: True
+    - pad_and_resize:
+        size: 352
+    - normalize:
+        mean: [ 0.5, 0.5, 0.5 ]
+        std: [ 0.5, 0.5, 0.5 ]

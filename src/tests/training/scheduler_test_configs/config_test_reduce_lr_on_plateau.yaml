@@ -1,0 +1,13 @@
+# optimizer: Optimizer, mode: str=..., factor: float=..., patience: int=..., verbose: bool=..., threshold: float=..., threshold_mode: str=..., cooldown: int=..., min_lr: float=..., eps: float=...
+
+scheduler:
+    type: reduce_lr_on_plateau
+    mode: min
+    factor: 0.1
+    patience: 2
+    verbose: true
+    threshold: 0.0003
+    threshold_mode: rel
+    cooldown: 4
+    min_lr: 0.0005
+    eps: 0.0006

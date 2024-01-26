@@ -1,0 +1,13 @@
+#lr: float=..., lambd: float=..., alpha: float=..., t0: float=..., weight_decay: float=...
+
+# Note that these parameters are only used for testing correct
+# parsing and initialization of the optimizer. The values don't
+# necessarily make a lot of sense in a normal configuration.
+
+optimizer:
+    type: "ASGD"
+    lr: 0.1
+    lambd: 0.2
+    alpha: 0.3
+    t0: 4000
+    weight_decay: 0.5

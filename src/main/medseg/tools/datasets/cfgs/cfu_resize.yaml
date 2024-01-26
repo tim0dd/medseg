@@ -1,0 +1,34 @@
+# Config to load the DFUC-FUSeg dataset in order to compute the class imbalance or calculate the mean and std of the dataset.
+settings:
+  transforms_backend: "torchvision"
+
+dataset:
+  type: "CFU"
+
+transforms:
+  train:
+    - to_tensor:
+        normalize_images: True
+        normalize_masks: False
+    - resize:
+        size: 512
+        img_interpolation: "bilinear"
+        antialias: True
+
+  val:
+    - to_tensor:
+        normalize_images: True
+        normalize_masks: False
+    - pad_and_resize:
+        size: 512
+        img_interpolation: "bilinear"
+        antialias: True
+
+  test:
+    - to_tensor:
+        normalize_images: True
+        normalize_masks: False
+    - pad_and_resize:
+        size: 512
+        img_interpolation: "bilinear"
+        antialias: True

@@ -1,0 +1,105 @@
+architecture:
+  arch_type: "SegformerB3"
+  model_name: "SegformerB3-R-CFU-512"
+  in_size: 512
+settings:
+  max_epochs: 256
+  batch_size: 8
+  random_seed: 42
+  full_determinism: False
+  mixed_precision: True
+  torch_compile: False
+  num_workers: 4
+  pin_memory: True
+  checkpoints:
+    save_mode: 'best_and_last'
+    metric: "iou"
+    min_epoch: 50
+  save_sample_segmentations: False
+  transforms_backend: "torchvision"
+optimizer:
+  type: 'AdamW'
+  lr: 0.00006
+loss:
+  type: "BCEL"
+scheduler:
+  type: "polynomial"
+  total_iters: 256
+  power: 1.0
+early_stop: False
+metrics:
+  tracked:
+    - "dice"
+    - "iou"
+    - "precision"
+    - "recall"
+  averaging_method: "micro"
+  ignore_background_class: True
+dataset:
+  type: "CFU"
+transforms:
+  train:
+    - to_tensor: True
+    - random_ratio_resize:
+        min_ratio: 1
+        max_ratio: 2
+    - random_crop:
+        size: 512
+        pad_if_needed: True
+        img_fill: 0
+        mask_fill: 0
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+    - random_horizontal_flip:
+        p: 0.5
+    - random_photometric_distort:
+        brightness: (0.875, 1.125)
+        contrast: (0.5, 1.5)
+        saturation: (0.5, 1.5)
+        hue: (-0.05, 0.05)
+        p: 0.5
+    - normalize:
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+  val:
+    - to_tensor: True
+    - random_ratio_resize:
+        min_ratio: 1
+        max_ratio: 2
+    - random_crop:
+        size: 512
+        pad_if_needed: True
+        img_fill: 0
+        mask_fill: 0
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+    - normalize:
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+  test:
+    - to_tensor: True
+    - random_ratio_resize:
+        min_ratio: 1
+        max_ratio: 2
+    - random_crop:
+        size: 512
+        pad_if_needed: True
+        img_fill: 0
+        mask_fill: 0
+    - threshold:
+        threshold: 127
+        pixel_min: 0
+        pixel_max: 255
+        apply_to_mask: True
+        apply_to_image: False
+    - normalize:
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]

@@ -1,0 +1,25 @@
+settings:
+    transforms_backend: torchvision
+
+transforms:
+    train:
+        - random_affine:
+            degrees: 11
+            translate: (0.2, 0.3)
+            shear: 40
+            interpolation: "BILINEAR"
+            fill: 0
+    val:
+        - random_affine:
+            degrees: 12
+            translate: (0.3, 0.4)
+            shear: 41
+            interpolation: "BILINEAR"
+            fill: 0
+    test:
+        - random_affine:
+            degrees: 13
+            translate: (0.4, 0.5)
+            shear: 42
+            interpolation: "BILINEAR"
+            fill: 0
