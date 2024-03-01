@@ -1,6 +1,5 @@
 import unittest
 
-import torch
 
 from medseg.data.dataset_manager import DatasetManager
 from medseg.data.datasets import FUSeg21

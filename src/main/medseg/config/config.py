@@ -3,7 +3,7 @@ import copy
 import oyaml
 
 from medseg.config.parse import parse_interpolation, parse_all_tuples, parse_metrics, \
-    parse_hyperopt_cfg, parse_checkpoint_cfg
+    parse_hyperopt_cfg, convert_deprecated_checkpoint_cfg
 from medseg.config.parse_transforms import parse_transforms
 
 
@@ -51,7 +51,7 @@ def load_and_parse_config(file_path: str) -> dict:
         cfg = parse_interpolation(cfg)
         cfg = parse_transforms(cfg)
         cfg = parse_hyperopt_cfg(cfg)
-        cfg = parse_checkpoint_cfg(cfg)
+        cfg = convert_deprecated_checkpoint_cfg(cfg)
         return cfg
 
 

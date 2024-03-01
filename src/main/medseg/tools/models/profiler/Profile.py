@@ -1,18 +1,22 @@
+"""
+From https://github.com/ruipeterpan/torch_profiler (not available through pip)
+"""
+
 
 class Profile(object):
     def __init__(
-        self, 
-        name: str, 
-        type: str, 
-        depth: int,
-        num_params: int,
-        input_shape: list,
-        output_shape: list,
-        input_elem_bytes: int,
-        output_elem_bytes: int,
-        fwd_latency: float,
-        macs: float,
-        fwd_flops: float,
+            self,
+            name: str,
+            type: str,
+            depth: int,
+            num_params: int,
+            input_shape: list,
+            output_shape: list,
+            input_elem_bytes: int,
+            output_elem_bytes: int,
+            fwd_latency: float,
+            macs: float,
+            fwd_flops: float,
     ):  # each Profile corresponds to the profile of a torch.nn module
         self.name = name  # torch.nn module name
         self.type = type  # torch.nn module type
@@ -35,7 +39,7 @@ class Profile(object):
         self.fwd_flops = fwd_flops
         self.fwd_flops_pctg = None
         self.children = []
-    
+
     def set_child_modules(self, children) -> None:
         """Sets up the child modules, and fills in 
         the overall percentage statistics
@@ -53,12 +57,12 @@ class Profile(object):
         # indent = "├─" * self.depth
         indent = "\t" * self.depth
         curr_str = (f"{indent}({self.name}): {self.type}, num_params {self.num_params}, " \
-            f"{round(self.fwd_latency, 3)}ms, {round(self.fwd_latency_pctg, 3)}% latency, " \
-            f"input shape {self.input_shape}, output shape {self.output_shape}\n")
+                    f"{round(self.fwd_latency, 3)}ms, {round(self.fwd_latency_pctg, 3)}% latency, " \
+                    f"input shape {self.input_shape}, output shape {self.output_shape}\n")
         for child in self.children:
             curr_str += str(child)
         return curr_str
-    
+
     def calculate_overall_stats(self, total_duration: float) -> None:
         """Recursively fills in the overall percentage statistics
 

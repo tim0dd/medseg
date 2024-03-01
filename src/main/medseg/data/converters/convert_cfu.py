@@ -4,7 +4,7 @@ import click
 
 from medseg.data.converters.converters import create_dataset
 from medseg.data.converters.helpers import check_in_folder_paths
-from medseg.verification.datasets.check_for_duplicates import find_similar
+from medseg.tools.datasets.check_for_duplicates import find_similar
 
 
 @click.command()

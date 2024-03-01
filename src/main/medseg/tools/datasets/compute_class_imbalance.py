@@ -87,8 +87,6 @@ def compute_class_imbalance(config: str, enable_transforms: bool):
 
     headers = ["", "Train", "Validation", "Test", "All"]
     print(tabulate(table_data, headers=headers, tablefmt="pretty"))
-    save_path = PathBuilder.out_builder().add(f"pixel_distribution_{ds_train.get_name()}.png").build()
-    # plot_pixel_distribution(total_pixel_counts, class_defs, save_path=save_path)
 
 
 def get_mean_std_pct_for_pixel_value(pixel_value: int, img_pixel_count_data: List[dict]) -> Tuple[
@@ -97,7 +95,7 @@ def get_mean_std_pct_for_pixel_value(pixel_value: int, img_pixel_count_data: Lis
 
     Args:
         pixel_value (int): Integer value of the pixel for the class.
-        img        img_pixel_count_data (List[dict]): List of dictionaries containing pixel counts for each class.
+        img_pixel_count_data (List[dict]): List of dictionaries containing pixel counts for each class.
 
     Returns:
         Tuple[float, float, float]: Mean, standard deviation, and percentage for the class.
@@ -156,33 +154,6 @@ def get_non_predefined_class_pixel_count(class_defs, img_pixel_count_data: List[
                 non_predefined_pixel_count[pixel_value] = non_predefined_pixel_count.get(pixel_value, 0) + count
 
     return non_predefined_pixel_count
-
-
-# def plot_pixel_distribution(img_pixel_counts: Dict[List[Dict]], class_defs: List[dict], save_path: str) -> None:
-#     """Plot the pixel distribution data for train, validation, and test datasets using seaborn.
-#
-#     Args:
-#         img_pixel_count_data_train (List[dict]): Pixel count data for the training dataset.
-#         img_pixel_count_data_val (List[dict]): Pixel count data for the validation dataset.
-#         img_pixel_count_data_test (List[dict]): Pixel count data for the test dataset.
-#         class_defs (List[dict]): List of dictionaries containing class definitions.
-#     """
-#
-#     data = []
-#     for dataset_name, pixel_count_list in img_pixel_counts.items():
-#         for img_data in pixel_count_list:
-#             for class_def in class_defs:
-#                 pixel_value = class_def['pixel_value']
-#                 label = class_def['label']
-#                 count = img_data.get(pixel_value, 0)
-#                 data.append({"Dataset": dataset_name, "Class": label, "Count": count})
-#
-#     df = pd.DataFrame(data)
-#     plt.figure(figsize=(10, 6))
-#     sns.barplot(x="Class", y="Count", hue="Dataset", data=df)
-#     plt.title("Pixel Distribution per Class")
-#     # save
-#     plt.savefig(save_path)
 
 
 if __name__ == '__main__':

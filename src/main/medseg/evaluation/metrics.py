@@ -62,7 +62,7 @@ class MetricsHistograms:
                    torch.zeros(num_classes))
 
     @classmethod
-    def from_state_dict(self, state_dict):
+    def from_state_dict(cls, state_dict):
         return MetricsHistograms(state_dict['hist_intersect'], state_dict['hist_union'], state_dict['hist_pred'],
                                  state_dict['hist_mask'])
 

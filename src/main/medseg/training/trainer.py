@@ -8,7 +8,7 @@ from typing import Optional, List
 import torch
 from tqdm import tqdm
 
-from medseg.config.parse import parse_checkpoint_cfg
+from medseg.config.parse import convert_deprecated_checkpoint_cfg
 from medseg.data.split_type import SplitType
 from medseg.evaluation.evaluator import Evaluator
 from medseg.evaluation.params import get_total_params, create_model_summary
@@ -37,7 +37,7 @@ class Trainer:
         Args:
             cfg (dict): Configuration dictionary containing model and training parameters.
         """
-        cfg = parse_checkpoint_cfg(cfg)
+        cfg = convert_deprecated_checkpoint_cfg(cfg)
         self.state = TrainerState(cfg)
         self.trial_path_builder = PathBuilder.trial_out_builder(cfg)
         if cfg_path is not None:

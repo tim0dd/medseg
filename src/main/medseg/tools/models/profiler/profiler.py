@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from deepspeed.accelerator import get_accelerator
-from medseg.verification.models.profiler.Profile import Profile
+from medseg.tools.models.profiler.Profile import Profile
 
 Tensor = torch.Tensor
 

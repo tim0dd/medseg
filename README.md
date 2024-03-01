@@ -12,6 +12,7 @@ Dependencies can be installed with the following commands, using an anaconda or 
 conda create -n "medseg" python=3.10.9
 conda activate medseg
 pip3 install -e ./src/main
+conda install -c nvidia cuda-compiler
 pip3 install -r requirements.txt
 ```
 

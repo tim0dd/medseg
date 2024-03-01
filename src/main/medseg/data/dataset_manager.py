@@ -46,10 +46,10 @@ class DatasetManager:
         Build a MedsegDataset based on the provided configuration and split type.
 
         Args:
+
             cfg (dict): The configuration dictionary.
             split_type (SplitType): The split type (TRAIN, VAL, or TEST).
-            indices (Optional[List[int]]): Custom indices to use for the dataset (defines which samples are in
-            the dataset split).
+            include_transforms_manager (bool): Determines if transforms_manager should be initialized
 
         Returns:
             MedsegDataset: A dataset instance for the given split type.

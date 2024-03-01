@@ -1,11 +1,12 @@
 import click
 import torch
 from beartype import beartype
-from medseg.verification.models.profiler.profiler import get_model_profile
+from medseg.tools.models.profiler.profiler import get_model_profile
 
 from medseg.config.config import load_and_parse_config
 from medseg.models.model_builder import build_model
 from medseg.util.path_builder import PathBuilder
+from medseg.tools.models.profiler.profiler import TIDSProfiler
 
 
 @click.command()
@@ -18,26 +19,7 @@ def calculate_flops(path: str):
     spatial_dim = cfg["architecture"]["in_size"]
     inputs = torch.randn(1, 3, spatial_dim, spatial_dim)
     try:
-        print("Trying to calculate MACS using torchprofile...")
-        from torchprofile import profile_macs
-        macs = profile_macs(model, inputs)
-        print(f"MACS for the model (torchprofile): {macs}")
-    except Exception as e:
-        print(f"torchprofile exception: {e}")
-
-    try:
-        print("Trying to calculate GFLOPs using fvcore...")
-        from fvcore.nn import flop_count
-        flops_dict, unsupported_ops_dict = flop_count(model, (inputs,))
-        total_flops = sum(flops_dict.values())
-        print(f"GFLOPs for the model (fvcore): {total_flops}")
-        print(f"Unsupported ops(fvcore): {unsupported_ops_dict}")
-    except Exception as e:
-        print(f"fvcore exception: {e}")
-
-    try:
         print("Trying to calculate GFLOPs using torch profiler...")
-        from medseg.verification.models.profiler.profiler import TIDSProfiler
         prof = TIDSProfiler(model)
         prof.start_profile()
         model(inputs)
@@ -51,6 +33,29 @@ def calculate_flops(path: str):
 
     except Exception as e:
         print(f"torch profiler exception: {e}")
+
+    try:
+        from torchprofile import profile_macs
+        print("torchprofile is installed. Trying to calculate MACS using torchprofile...")
+        macs = profile_macs(model, inputs)
+        print(f"MACS for the model (torchprofile): {macs}")
+    except ImportError:
+        print("Optional dependency torchprofile is not installed. Skipping additional MACS calculation using "
+              "torchprofile.")
+    except Exception as e:
+        print(f"torchprofile exception: {e}")
+
+    try:
+        from fvcore.nn import flop_count
+        print("fvcore is installed. Trying to calculate GFLOPs using fvcore...")
+        flops_dict, unsupported_ops_dict = flop_count(model, (inputs,))
+        total_flops = sum(flops_dict.values())
+        print(f"GFLOPs for the model (fvcore): {total_flops}")
+        print(f"Unsupported ops(fvcore): {unsupported_ops_dict}")
+    except ImportError:
+        print("Optional dependency  fvcore is not installed. Skipping GFLOPs calculation using fvcore.")
+    except Exception as e:
+        print(f"fvcore exception: {e}")
 
 
 if __name__ == "__main__":

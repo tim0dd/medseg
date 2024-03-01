@@ -10,6 +10,7 @@ def build_model(cfg: dict, out_channels: Optional[int] = None) -> Segmentor:
     Build a segmentor from a config dict.
     Args:
         cfg: Config dict.
+        out_channels: Number of output channels
     Returns:
         The created segmentor.
     """
